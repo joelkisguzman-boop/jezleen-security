@@ -47,9 +47,98 @@ function render(){const q=$('search').value.toLowerCase(),f=$('filter').value;co
 function reset(){ $('form').reset();$('id').value='';$('active').checked=true;$('formTitle').textContent='Nuevo producto';$('cancel').classList.add('hidden');imageData='';$('preview').classList.add('hidden') }
 function editProduct(i){const p=products[i];$('id').value=i;$('name').value=p.name;$('brand').value=p.brand;$('category').value=p.category;$('description').value=p.description;$('price').value=p.price||'';$('pdf').value=p.pdf||'';$('featured').checked=!!p.featured;$('active').checked=p.active!==false;imageData=p.image||'';if(imageData){$('preview').src=imageData;$('preview').classList.remove('hidden')}$('formTitle').textContent='Editar producto';$('cancel').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'})}
 window.editProduct=editProduct;window.deleteProduct=async i=>{if(confirm('¿Eliminar este producto?')){products.splice(i,1);localStorage.setItem(KEY,JSON.stringify(products));render();await syncCloud()}};window.duplicateProduct=i=>{products.splice(i,0,{...products[i],id:undefined,name:products[i].name+' - COPIA'});localStorage.setItem(KEY,JSON.stringify(products));render()};
-$('image').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{imageData=r.result;$('preview').src=imageData;$('preview').classList.remove('hidden')};r.readAsDataURL(f)};
-$('form').onsubmit=async e=>{e.preventDefault();const idx=$('id').value;const old=idx!==''?products[Number(idx)]:{};const p={...old,name:$('name').value.trim(),brand:$('brand').value,category:$('category').value,description:$('description').value.trim(),price:$('price').value.trim()||'Consultar precio',pdf:$('pdf').value.trim(),image:imageData||old.image||'',featured:$('featured').checked,active:$('active').checked,sort_order:old.sort_order??products.length};if(idx==='')products.unshift(p);else products[Number(idx)]=p;localStorage.setItem(KEY,JSON.stringify(products));render();$('msg').textContent='Producto guardado.';reset();const ok=await syncCloud();if(sb)$('msg').textContent=ok?'Producto guardado y sincronizado.':'Guardado localmente; revisa la configuración de nube.'};$('cancel').onclick=reset;$('search').oninput=render;$('filter').onchange=render;
-$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jezleen_catalogo_v5.json';a.click();URL.revokeObjectURL(a.href)};
+$('image').onchange=e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+
+  if(!f.type.startsWith('image/')){
+    alert('Selecciona una imagen válida.');
+    return;
+  }
+
+  imageData=f;
+
+  const r=new FileReader();
+  r.onload=()=>{
+    $('preview').src=r.result;
+    $('preview').classList.remove('hidden');
+  };
+  r.readAsDataURL(f);
+};
+$('form').onsubmit=async e=>{
+  e.preventDefault();
+
+  const idx=$('id').value;
+  const old=idx!==''?products[Number(idx)]:{};
+  let imageUrl=old.image||'';
+
+  // Subir imagen nueva a Supabase Storage
+  if(imageData instanceof File){
+    if(!sb){
+      $('msg').textContent='No hay conexión con Supabase.';
+      return;
+    }
+
+    const ext=imageData.name.split('.').pop().toLowerCase();
+    const fileName=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
+
+    $('msg').textContent='Subiendo imagen...';
+
+    const {error:uploadError}=await sb
+      .storage
+      .from('product-images')
+      .upload(fileName,imageData,{
+        cacheControl:'3600',
+        upsert:false,
+        contentType:imageData.type
+      });
+
+    if(uploadError){
+      console.error(uploadError);
+      $('msg').textContent='No se pudo subir la imagen: '+uploadError.message;
+      return;
+    }
+
+    const {data:urlData}=sb
+      .storage
+      .from('product-images')
+      .getPublicUrl(fileName);
+
+    imageUrl=urlData.publicUrl;
+  }
+
+  const p={
+    ...old,
+    name:$('name').value.trim(),
+    brand:$('brand').value,
+    category:$('category').value,
+    description:$('description').value.trim(),
+    price:$('price').value.trim()||'Consultar precio',
+    pdf:$('pdf').value.trim(),
+    image:imageUrl,
+    featured:$('featured').checked,
+    active:$('active').checked,
+    sort_order:old.sort_order??products.length
+  };
+
+  if(idx==='') products.unshift(p);
+  else products[Number(idx)]=p;
+
+  localStorage.setItem(KEY,JSON.stringify(products));
+  render();
+
+  const ok=await syncCloud();
+
+  $('msg').textContent=ok
+    ?'Producto guardado y sincronizado.'
+    :'Guardado localmente; revisa la configuración de nube.';
+
+  reset();
+};
+
+$('cancel').onclick=reset;
+$('search').oninput=render;
+$('filter').onchange=render;
 $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{products=JSON.parse(r.result);localStorage.setItem(KEY,JSON.stringify(products));render();alert('Catálogo importado.')}catch(x){alert('Archivo no válido.')}};r.readAsText(f)};
 cloudSetup();
   $('loginBtn').onclick=async()=>{
