@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Jezleen Security — videovigilancia, control de acceso, alarmas y seguridad electrónica en República Dominicana.">
+<meta name="theme-color" content="#050b16">
+<title>Jezleen Security | Tu seguridad, nuestra prioridad</title>
+<style>
+:root{
+ --bg:#040914;--panel:#091322;--panel2:#0d1b2d;--blue:#087dff;--blue2:#39a7ff;
+ --white:#f6f9fd;--muted:#9cacbf;--line:rgba(91,177,255,.17);--shadow:0 24px 70px rgba(0,0,0,.34)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--white);line-height:1.6}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:min(1180px,92%);margin:auto}
+nav{position:fixed;top:0;left:0;width:100%;z-index:50;background:rgba(4,9,20,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.navin{height:78px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.brand{display:flex;align-items:center;gap:11px}
+.brandMark{width:52px;height:52px;border-radius:13px;object-fit:cover;object-position:center}
+.brandText{font-size:18px;font-weight:900;letter-spacing:.5px}.brandText span{color:var(--blue2)}
+.links{display:flex;gap:24px;color:#dce7f5;font-size:14px}.links a:hover{color:var(--blue2)}
+.navbtn,.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-weight:800}
+.navbtn{padding:10px 16px;border:1px solid rgba(57,167,255,.45);background:rgba(8,125,255,.12)}
+.hero{min-height:790px;padding-top:78px;display:flex;align-items:center;position:relative;overflow:hidden;background:
+radial-gradient(circle at 75% 42%,rgba(8,125,255,.24),transparent 34%),
+linear-gradient(120deg,#030711,#071426 57%,#071c33)}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0 60%,rgba(57,167,255,.04) 60% 60.2%,transparent 60.2% 100%);pointer-events:none}
+.heroGrid{display:grid;grid-template-columns:1fr .9fr;gap:65px;align-items:center;position:relative;z-index:2}
+.eyebrow{color:var(--blue2);font-size:12px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:16px}
+.hero h1{font-size:clamp(45px,6.2vw,78px);line-height:.98;letter-spacing:-3.5px;margin-bottom:25px}
+.hero h1 span{color:var(--blue2)}
+.hero p{font-size:18px;color:var(--muted);max-width:610px;margin-bottom:30px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:14px 21px;font-size:14px}
+.primary{background:var(--blue);box-shadow:0 14px 35px rgba(8,125,255,.25)}
+.secondary{border:1px solid var(--line);background:rgba(255,255,255,.035)}
+.heroLogo{width:min(500px,100%);margin:auto;border-radius:28px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.floating{position:absolute;right:7%;bottom:9%;padding:14px 18px;border-radius:14px;background:rgba(4,10,20,.78);border:1px solid var(--line);backdrop-filter:blur(12px);font-size:12px;color:#dce8f5}
+.floating strong{display:block;font-size:18px;color:white}
+.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#07101c}
+.trustGrid{display:grid;grid-template-columns:repeat(4,1fr)}
+.trustItem{padding:22px 18px;text-align:center;border-right:1px solid var(--line)}
+.trustItem:last-child{border-right:0}.trustItem strong{display:block}.trustItem span{font-size:12px;color:var(--muted)}
+section{padding:92px 0}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px}
+.sectionHead h2{font-size:39px;line-height:1.08;letter-spacing:-1.5px}.sectionHead p{max-width:520px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{padding:27px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,var(--panel),#07101d);min-height:215px;transition:.22s}
+.card:hover{transform:translateY(-5px);border-color:rgba(57,167,255,.45);box-shadow:0 18px 45px rgba(0,0,0,.22)}
+.icon{font-size:26px;margin-bottom:20px}.card h3{font-size:18px;margin-bottom:8px}.card p{font-size:14px;color:var(--muted)}
+.darkband{background:#07101c;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.brands{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.brandCard{padding:20px 10px;text-align:center;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025);font-weight:800}
+.brandCard span{display:block;color:var(--blue2);font-size:11px;margin-top:3px;font-weight:500}
+.catalogTabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.tab{cursor:pointer;padding:10px 15px;border:1px solid var(--line);border-radius:999px;background:#081322;color:#dce8f5;font-weight:700;font-size:13px}
+.tab.active{background:var(--blue);border-color:var(--blue)}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.galleryItem{border:1px solid var(--line);background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s}
+.galleryItem:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.galleryItem img{width:100%;height:330px;object-fit:cover;object-position:top}
+.galleryItem .cap{padding:14px 16px;background:#081322;color:#fff;font-size:13px}
+.galleryItem .cap b{display:block;color:var(--blue2);margin-bottom:2px}
+.projectGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.project{min-height:330px;border:1px solid var(--line);border-radius:19px;padding:30px;display:flex;flex-direction:column;justify-content:end;background:
+radial-gradient(circle at 75% 25%,rgba(8,125,255,.23),transparent 35%),#091625}
+.project h3{font-size:30px}.project p{color:var(--muted);max-width:600px}
+.projectCol{display:grid;gap:18px}.project.small{min-height:156px}
+.contactGrid{display:grid;grid-template-columns:.85fr 1.15fr;gap:25px}
+.contactBox,.formBox{border:1px solid var(--line);border-radius:20px;background:#091523;padding:30px}
+.contactLine{padding:16px 0;border-bottom:1px solid var(--line)}.contactLine:last-child{border-bottom:0}
+.contactLine small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.5px}.contactLine a{color:#fff;font-weight:700}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-size:12px;color:#b9c8d9}input,select,textarea{width:100%;margin-top:6px;background:#050c17;color:white;border:1px solid var(--line);border-radius:10px;padding:12px 13px;font:inherit;outline:none}textarea{min-height:125px;resize:vertical}.full{grid-column:1/-1}
+.formActions{grid-column:1/-1;display:flex;justify-content:flex-end}
+.notice{margin-top:12px;color:var(--muted);font-size:12px}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}.foot{display:flex;justify-content:space-between;gap:20px}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:25px}.modal.open{display:flex}.modalInner{width:min(1100px,96vw);position:relative}.modal img{width:100%;max-height:85vh;object-fit:contain;border-radius:12px}.close{position:absolute;right:0;top:-42px;background:none;border:0;color:white;font-size:30px;cursor:pointer}
+@media(max-width:900px){.links{display:none}.hero{padding:125px 0 75px}.heroGrid{grid-template-columns:1fr}.heroLogo{max-width:500px}.cards{grid-template-columns:1fr 1fr}.brands{grid-template-columns:repeat(4,1fr)}.projectGrid,.contactGrid{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}.trustGrid{grid-template-columns:1fr 1fr}.trustItem:nth-child(2){border-right:0}.sectionHead{display:block}.sectionHead p{margin-top:12px}}
+@media(max-width:560px){.navbtn{display:none}.brandMark{width:44px;height:44px}.brandText{font-size:15px}.cards,.brands{grid-template-columns:1fr}.trustGrid{grid-template-columns:1fr}.trustItem{border-right:0;border-bottom:1px solid var(--line)}.trustItem:last-child{border-bottom:0}form{grid-template-columns:1fr}.full,.formActions{grid-column:auto}.hero h1{font-size:49px}.galleryItem img{height:250px}}
+</style>
+</head>
+<body>
+<nav>
+ <div class="container navin">
+  <a class="brand" href="#inicio"><img class="brandMark" src="assets/LOGO 1.jpeg" alt="Jezleen Security"><div class="brandText">JEZLEEN <span>SECURITY</span></div></a>
+  <div class="links"><a href="#servicios">Servicios</a><a href="#productos">Productos</a><a href="#marcas">Marcas</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a></div>
+  <a class="navbtn" href="https://wa.me/18299699619" target="_blank">WhatsApp</a>
+ </div>
+</nav>
+
+<main id="inicio">
+<section class="hero">
+ <div class="container heroGrid">
+  <div>
+   <div class="eyebrow">Seguridad electrónica profesional</div>
+   <h1>Tu seguridad,<br><span>nuestra prioridad.</span></h1>
+   <p>Jezleen Security integra videovigilancia, control de acceso, alarmas y tecnología de seguridad para hogares, comercios y empresas en República Dominicana.</p>
+   <div class="actions"><a class="btn primary" href="https://wa.me/18299699619?text=Hola%20Jezleen%20Security,%20quiero%20una%20cotizaci%C3%B3n." target="_blank">Solicitar cotización</a><a class="btn secondary" href="#productos">Ver catálogo</a></div>
+  </div>
+  <div style="position:relative"><img class="heroLogo" src="assets/LOGO 1.jpeg" alt="Logo Jezleen Security"><div class="floating"><strong>24/7</strong>Protección y monitoreo</div></div>
+ </div>
+</section>
+
+<div class="trust"><div class="container trustGrid">
+ <div class="trustItem"><strong>Instalación profesional</strong><span>Soluciones bien configuradas</span></div>
+ <div class="trustItem"><strong>Acceso remoto</strong><span>Control desde tu teléfono</span></div>
+ <div class="trustItem"><strong>Marcas reconocidas</strong><span>Equipos para cada necesidad</span></div>
+ <div class="trustItem"><strong>Atención directa</strong><span>Asesoría y cotización</span></div>
+</div></div>
+
+<section id="servicios"><div class="container">
+ <div class="sectionHead"><div><div class="eyebrow">Nuestros servicios</div><h2>Seguridad diseñada para tu espacio.</h2></div><p>Desde una cámara para tu hogar hasta sistemas completos para empresas: diseñamos la solución según el nivel de protección que necesitas.</p></div>
+ <div class="cards">
+  <article class="card"><div class="icon">◉</div><h3>Videovigilancia</h3><p>Cámaras IP, CCTV, visión nocturna, grabación y acceso remoto desde teléfonos y computadoras.</p></article>
+  <article class="card"><div class="icon">⌁</div><h3>Control de acceso</h3><p>Soluciones para controlar y registrar quién puede entrar a áreas residenciales, comerciales o empresariales.</p></article>
+  <article class="card"><div class="icon">⚠</div><h3>Alarmas</h3><p>Detección de intrusión y sistemas de alerta para responder con mayor rapidez ante eventos.</p></article>
+  <article class="card"><div class="icon">▣</div><h3>DVR / NVR</h3><p>Grabadores y almacenamiento para administrar múltiples cámaras y conservar evidencia de forma organizada.</p></article>
+ </div>
+</div></section>
+
+<section id="productos" class="darkband"><div class="container">
+ <div class="sectionHead"><div><div class="eyebrow">Catálogo visual</div><h2>Equipos para construir tu sistema.</h2></div><p>Una selección visual de las líneas de productos que podemos integrar en tu proyecto. Solicita disponibilidad y precio.</p></div>
+ <div class="catalogTools" style="display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:22px">
+  <div class="catalogTabs">
+   <button class="tab active" data-filter="all">Todo</button><button class="tab" data-filter="camaras">Cámaras</button><button class="tab" data-filter="dvr">DVR / NVR</button><button class="tab" data-filter="kits">Kits</button><button class="tab" data-filter="ptz">PTZ</button><button class="tab" data-filter="acceso">Acceso</button><button class="tab" data-filter="alarmas">Alarmas</button>
+  </div>
+  <input id="productSearch" placeholder="Buscar modelo o producto..." style="background:#050c17;color:white;border:1px solid var(--line);border-radius:999px;padding:10px 15px;min-width:240px;outline:none">
+ </div>
+ <div class="gallery" id="productGallery"></div>
+ <p id="catalogEmpty" style="display:none;color:var(--muted);text-align:center;padding:35px">No hay productos en esta categoría.</p>
+</div></section>
+
+<section id="marcas"><div class="container">
+ <div class="sectionHead"><div><div class="eyebrow">Tecnología</div><h2>Marcas que podemos integrar.</h2></div><p>Trabajamos con diferentes ecosistemas para seleccionar el equipo que mejor se adapte al presupuesto y requerimiento del proyecto.</p></div>
+ <div class="brands">
+  <div class="brandCard">UNV<span>Uniview</span></div><div class="brandCard">TVT<span>Security</span></div><div class="brandCard">HIKVISION<span>Security</span></div><div class="brandCard">DAHUA<span>Technology</span></div><div class="brandCard">IMOU<span>Life</span></div><div class="brandCard">UNIARCH<span>Security</span></div><div class="brandCard">JEZLEEN<span>Security</span></div>
+ </div>
+</div></section>
+
+<section id="proyectos" class="darkband"><div class="container">
+ <div class="sectionHead"><div><div class="eyebrow">Proyectos</div><h2>De una cámara a una solución completa.</h2></div><p>Cuéntanos qué quieres proteger y te ayudamos a definir cobertura, equipos, almacenamiento y acceso remoto.</p></div>
+ <div class="projectGrid">
+  <div class="project"><div class="eyebrow">Residencial · Comercial · Empresarial</div><h3>Diseñamos seguridad a la medida.</h3><p>Evaluamos el espacio, los puntos críticos y el nivel de protección requerido para recomendar una solución eficiente y escalable.</p></div>
+  <div class="projectCol"><div class="project small"><div class="eyebrow">01</div><h3>Evaluación</h3><p>Definimos necesidades y zonas a proteger.</p></div><div class="project small"><div class="eyebrow">02</div><h3>Instalación</h3><p>Configuramos cámaras, grabadores y acceso remoto.</p></div></div>
+ </div>
+</div></section>
+
+<section id="contacto"><div class="container">
+ <div class="sectionHead"><div><div class="eyebrow">Contacto</div><h2>Hablemos de tu proyecto.</h2></div><p>Envíanos los datos básicos y te prepararemos el mensaje para solicitar tu cotización por WhatsApp.</p></div>
+ <div class="contactGrid">
+  <div class="contactBox">
+   <div class="contactLine"><small>WhatsApp / Teléfono</small><a href="https://wa.me/18299699619" target="_blank">+1 829 969 9619</a></div>
+   <div class="contactLine"><small>Correo</small><a href="mailto:Joelkisguzman@gmail.com">Joelkisguzman@gmail.com</a></div>
+   <div class="contactLine"><small>Ubicación</small><span>El Copey, D.M. Villa Elisa, República Dominicana</span></div>
+   <div class="contactLine"><small>Atención</small><span>Cotizaciones, instalación y soluciones de seguridad electrónica.</span></div>
+  </div>
+  <div class="formBox">
+   <form id="quoteForm">
+    <label>Nombre<input name="nombre" required placeholder="Tu nombre"></label>
+    <label>Teléfono<input name="telefono" placeholder="Tu número"></label>
+    <label>Tipo de proyecto<select name="proyecto"><option>Residencial</option><option>Comercial</option><option>Empresarial</option><option>Otro</option></select></label>
+    <label>Servicio<select name="servicio"><option>Videovigilancia</option><option>DVR / NVR</option><option>Control de acceso</option><option>Alarmas</option><option>Kit de cámaras</option><option>Otro</option></select></label>
+    <label class="full">¿Qué necesitas?<textarea name="detalle" placeholder="Ej.: necesito 8 cámaras para una vivienda, grabación y acceso desde el celular."></textarea></label>
+    <div class="formActions"><button class="btn primary" type="submit">Enviar por WhatsApp</button></div>
+   </form>
+   <div class="notice">Al enviar, se abrirá WhatsApp con los datos de tu solicitud.</div>
+  </div>
+ </div>
+</div></section>
+</main>
+
+<footer><div class="container foot"><div>© 2026 Jezleen Security. Todos los derechos reservados.</div><div>Tu seguridad, nuestra prioridad · República Dominicana</div></div></footer>
+
+<div class="modal" id="modal"><div class="modalInner"><button class="close" id="close">×</button><img id="modalImg" alt="Catálogo Jezleen Security"></div></div>
+
+<script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const defaultProducts=[
+{name:'UAC-B145-AF28(40)LM-DL',brand:'UNV',category:'camaras',description:'5MP ColorHunter Fixed Dual-light Bullet Analog Camera',price:'Consultar precio',image:'assets/image.png',featured:true},
+{name:'UAC-B142-AF28(40)LM-DL',brand:'UNV',category:'camaras',description:'2MP ColorHunter Fixed Dual-light Bullet Analog Camera',price:'Consultar precio',image:'assets/image(1).png'},
+{name:'UAC-T145-AF28(40)LM-DL',brand:'UNV',category:'camaras',description:'5MP ColorHunter Fixed Dual-light Turret Analog Camera',price:'Consultar precio',image:'assets/image(2).png'},
+{name:'XVR301-16Q3',brand:'UNV',category:'dvr',description:'1 HDD 16-Ch 1U Digital Video Recorder',price:'Consultar precio',image:'assets/image(4).png',featured:true},
+{name:'KIT/XVR301-08U3/8×UAC-B128-ADF28MS',brand:'UNV',category:'kits',description:'Kit de DVR de 8 canales con 8 cámaras Bullet.',price:'Consultar precio',image:'assets/image(6).png'},
+{name:'IPC6315LFW-AX5C-VG1',brand:'UNV',category:'ptz',description:'5MP 5X ColorHunter Tri-Guard Dual-light Network PTZ Camera',price:'Consultar precio',image:'assets/image(7).png'},
+{name:'IPC-B232-AF40-DL-ECO',brand:'Uniarch',category:'camaras',description:'2MP Double-Light Bullet Network Camera',price:'Consultar precio',image:'assets/image(9).png'}];
+let products;try{products=JSON.parse(localStorage.getItem('jezleen_products_v5'))||defaultProducts}catch(e){products=defaultProducts}
+let activeFilter='all';
+const tabs=document.querySelectorAll('.tab');
+const gallery=document.getElementById('productGallery');
+const search=document.getElementById('productSearch');
+function renderProducts(){const q=(search.value||'').toLowerCase();const list=products.filter(p=>(activeFilter==='all'||p.category===activeFilter)&&((p.name+' '+p.brand+' '+p.description).toLowerCase().includes(q)));gallery.innerHTML=list.map((p,i)=>`<div class="galleryItem" data-img="${p.image}"><img src="${p.image}" alt="${p.name}"><div class="cap"><b>${p.brand} · ${p.name}</b>${p.description}<br><span style="color:#9cacbf">${p.price||'Consultar precio'}</span><div style="margin-top:9px"><a class="btn primary" style="padding:8px 12px;font-size:12px" target="_blank" href="https://wa.me/18299699619?text=${encodeURIComponent('Hola Jezleen Security. Me interesa el producto '+p.name+'. ¿Me pueden enviar precio y disponibilidad?')}">Cotizar por WhatsApp</a></div></div></div>`).join('');document.getElementById('catalogEmpty').style.display=list.length?'none':'block';document.querySelectorAll('.galleryItem').forEach(item=>item.addEventListener('click',e=>{if(e.target.closest('a'))return;modalImg.src=item.dataset.img;modal.classList.add('open')}))}
+tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');activeFilter=tab.dataset.filter;renderProducts()}));
+search.addEventListener('input',renderProducts);
+const modal=document.getElementById('modal'), modalImg=document.getElementById('modalImg');
+document.getElementById('close').onclick=()=>modal.classList.remove('open');
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
+
+renderProducts();
+(async()=>{try{const C=window.JEZLEEN_CONFIG||{};if(C.supabaseUrl&&C.supabaseAnonKey&&window.supabase){const client=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);const {data,error}=await client.from(C.supabaseTable||'products').select('*').eq('active',true).order('sort_order',{ascending:true});if(!error&&data&&data.length){products=data;localStorage.setItem('jezleen_products_v5',JSON.stringify(products));renderProducts()}}}catch(e){console.log('Catálogo local:',e)}})();
+
+document.getElementById('quoteForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const f=new FormData(e.target);
+ const msg=`Hola Jezleen Security. Quiero solicitar una cotización.%0A%0ANombre: ${encodeURIComponent(f.get('nombre'))}%0ATeléfono: ${encodeURIComponent(f.get('telefono')||'No indicado')}%0AProyecto: ${encodeURIComponent(f.get('proyecto'))}%0AServicio: ${encodeURIComponent(f.get('servicio'))}%0ADetalle: ${encodeURIComponent(f.get('detalle')||'No indicado')}`;
+ window.open(`https://wa.me/18299699619?text=${msg}`,'_blank');
+});
+</script>
+</body>
+</html>
