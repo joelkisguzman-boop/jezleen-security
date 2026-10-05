@@ -51,7 +51,8 @@ $('image').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileR
 $('form').onsubmit=async e=>{e.preventDefault();const idx=$('id').value;const old=idx!==''?products[Number(idx)]:{};const p={...old,name:$('name').value.trim(),brand:$('brand').value,category:$('category').value,description:$('description').value.trim(),price:$('price').value.trim()||'Consultar precio',pdf:$('pdf').value.trim(),image:imageData||old.image||'',featured:$('featured').checked,active:$('active').checked,sort_order:old.sort_order??products.length};if(idx==='')products.unshift(p);else products[Number(idx)]=p;localStorage.setItem(KEY,JSON.stringify(products));render();$('msg').textContent='Producto guardado.';reset();const ok=await syncCloud();if(sb)$('msg').textContent=ok?'Producto guardado y sincronizado.':'Guardado localmente; revisa la configuración de nube.'};$('cancel').onclick=reset;$('search').oninput=render;$('filter').onchange=render;
 $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jezleen_catalogo_v5.json';a.click();URL.revokeObjectURL(a.href)};
 $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{products=JSON.parse(r.result);localStorage.setItem(KEY,JSON.stringify(products));render();alert('Catálogo importado.')}catch(x){alert('Archivo no válido.')}};r.readAsText(f)};
-$('loginBtn').onclick=async()=>{
+cloudSetup();
+  $('loginBtn').onclick=async()=>{
   const pass=$('pass').value;
   if(C.supabaseUrl&&C.supabaseAnonKey&&sb){
     const email=$('email').value.trim();
