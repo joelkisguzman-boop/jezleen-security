@@ -336,6 +336,41 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   .brandCard{min-height:105px}
 }
 
+
+/* =========================================================
+   HERO — SEGURIDAD A LA MEDIDA
+   Imagen generada para Jezleen Security
+   ========================================================= */
+.securityMeasureHero{
+  position:relative !important;
+  overflow:hidden !important;
+  min-height:330px !important;
+  background:
+    linear-gradient(90deg,rgba(4,14,27,.97) 0%,rgba(4,14,27,.90) 34%,rgba(4,14,27,.42) 63%,rgba(4,14,27,.18) 100%),
+    url("assets/hero-seguridad-medida.png") center center / cover no-repeat !important;
+}
+
+.securityMeasureHero > *{
+  position:relative;
+  z-index:2;
+}
+
+.securityMeasureHero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(2,10,20,.25),transparent 60%);
+  pointer-events:none;
+  z-index:1;
+}
+
+@media(max-width:700px){
+  .securityMeasureHero{
+    min-height:420px !important;
+    background-position:center right !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -444,7 +479,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   </div>
 </section>
 
-<section id="proyectos" class="darkband"><div class="container">
+<section id="proyectos" class="darkband securityMeasureHero"><div class="container">
  <div class="sectionHead"><div><div class="eyebrow">Proyectos</div><h2>De una cámara a una solución completa.</h2></div><p>Cuéntanos qué quieres proteger y te ayudamos a definir cobertura, equipos, almacenamiento y acceso remoto.</p></div>
  <div class="projectGrid">
   <div class="project"><div class="eyebrow">Residencial · Comercial · Empresarial</div><h3>Diseñamos seguridad a la medida.</h3><p>Evaluamos el espacio, los puntos críticos y el nivel de protección requerido para recomendar una solución eficiente y escalable.</p></div>
