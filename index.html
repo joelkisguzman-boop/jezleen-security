@@ -59,12 +59,65 @@ section{padding:92px 0}
 .catalogTabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
 .tab{cursor:pointer;padding:10px 15px;border:1px solid var(--line);border-radius:999px;background:#081322;color:#dce8f5;font-weight:700;font-size:13px}
 .tab.active{background:var(--blue);border-color:var(--blue)}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.galleryItem{border:1px solid var(--line);background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s}
-.galleryItem:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-.galleryItem img{width:100%;height:330px;object-fit:cover;object-position:top}
-.galleryItem .cap{padding:14px 16px;background:#081322;color:#fff;font-size:13px}
-.galleryItem .cap b{display:block;color:var(--blue2);margin-bottom:2px}
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  align-items:stretch;
+}
+.galleryItem{
+  border:1px solid var(--line);
+  background:#081322;
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-width:0;
+}
+.galleryItem:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+.galleryItem img{
+  width:100%;
+  height:330px;
+  object-fit:contain;
+  object-position:center;
+  background:#fff;
+  display:block;
+  flex-shrink:0;
+}
+.galleryItem .cap{
+  padding:14px 16px 16px;
+  background:#081322;
+  color:#fff;
+  font-size:13px;
+  line-height:1.5;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.galleryItem .cap b{
+  display:block;
+  color:var(--blue2);
+  margin-bottom:5px;
+}
+.galleryItem .cap .productPrice{
+  display:block;
+  color:#9cacbf;
+  margin-top:5px;
+}
+.galleryItem .cap .productQuote{
+  margin-top:auto;
+  padding-top:12px;
+}
+.galleryItem .cap .productQuote .btn{
+  padding:8px 12px;
+  font-size:12px;
+}
 .projectGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
 .project{min-height:330px;border:1px solid var(--line);border-radius:19px;padding:30px;display:flex;flex-direction:column;justify-content:end;background:
 radial-gradient(circle at 75% 25%,rgba(8,125,255,.23),transparent 35%),#091625}
@@ -80,7 +133,20 @@ form{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-size:12px;co
 footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}.foot{display:flex;justify-content:space-between;gap:20px}
 .modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:25px}.modal.open{display:flex}.modalInner{width:min(1100px,96vw);position:relative}.modal img{width:100%;max-height:85vh;object-fit:contain;border-radius:12px}.close{position:absolute;right:0;top:-42px;background:none;border:0;color:white;font-size:30px;cursor:pointer}
 @media(max-width:900px){.links{display:none}.hero{padding:125px 0 75px}.heroGrid{grid-template-columns:1fr}.heroLogo{max-width:500px}.cards{grid-template-columns:1fr 1fr}.brands{grid-template-columns:repeat(4,1fr)}.projectGrid,.contactGrid{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}.trustGrid{grid-template-columns:1fr 1fr}.trustItem:nth-child(2){border-right:0}.sectionHead{display:block}.sectionHead p{margin-top:12px}}
-@media(max-width:560px){.navbtn{display:none}.brandMark{width:44px;height:44px}.brandText{font-size:15px}.cards,.brands{grid-template-columns:1fr}.trustGrid{grid-template-columns:1fr}.trustItem{border-right:0;border-bottom:1px solid var(--line)}.trustItem:last-child{border-bottom:0}form{grid-template-columns:1fr}.full,.formActions{grid-column:auto}.hero h1{font-size:49px}.galleryItem img{height:250px}}
+@media(max-width:560px){
+  .navbtn{display:none}
+  .brandMark{width:44px;height:44px}
+  .brandText{font-size:15px}
+  .cards,.brands{grid-template-columns:1fr}
+  .trustGrid{grid-template-columns:1fr}
+  .trustItem{border-right:0;border-bottom:1px solid var(--line)}
+  .trustItem:last-child{border-bottom:0}
+  form{grid-template-columns:1fr}
+  .full,.formActions{grid-column:auto}
+  .hero h1{font-size:49px}
+  .gallery{grid-template-columns:1fr}
+  .galleryItem img{height:250px}
+}
 </style>
 </head>
 <body>
@@ -191,7 +257,44 @@ let activeFilter='all';
 const tabs=document.querySelectorAll('.tab');
 const gallery=document.getElementById('productGallery');
 const search=document.getElementById('productSearch');
-function renderProducts(){const q=(search.value||'').toLowerCase();const list=products.filter(p=>(activeFilter==='all'||p.category===activeFilter)&&((p.name+' '+p.brand+' '+p.description).toLowerCase().includes(q)));gallery.innerHTML=list.map((p,i)=>`<div class="galleryItem" data-img="${p.image}"><img src="${p.image}" alt="${p.name}"><div class="cap"><b>${p.brand} · ${p.name}</b>${p.description}<br><span style="color:#9cacbf">${p.price||'Consultar precio'}</span><div style="margin-top:9px"><a class="btn primary" style="padding:8px 12px;font-size:12px" target="_blank" href="https://wa.me/18299699619?text=${encodeURIComponent('Hola Jezleen Security. Me interesa el producto '+p.name+'. ¿Me pueden enviar precio y disponibilidad?')}">Cotizar por WhatsApp</a></div></div></div>`).join('');document.getElementById('catalogEmpty').style.display=list.length?'none':'block';document.querySelectorAll('.galleryItem').forEach(item=>item.addEventListener('click',e=>{if(e.target.closest('a'))return;modalImg.src=item.dataset.img;modal.classList.add('open')}))}
+function renderProducts(){
+  const q=(search.value||'').toLowerCase().trim();
+  const list=products.filter(p=>
+    (activeFilter==='all'||p.category===activeFilter) &&
+    ((p.name||'')+' '+(p.brand||'')+' '+(p.description||'')).toLowerCase().includes(q)
+  );
+
+  gallery.innerHTML=list.map(p=>`
+    <article class="galleryItem" data-img="${p.image||''}">
+      <img src="${p.image||''}" alt="${p.name||'Producto Jezleen Security'}" loading="lazy">
+      <div class="cap">
+        <b>${p.brand||''} · ${p.name||''}</b>
+        <div>${p.description||''}</div>
+        <span class="productPrice">${p.price||'Consultar precio'}</span>
+        <div class="productQuote">
+          <a class="btn primary"
+             target="_blank"
+             rel="noopener"
+             href="https://wa.me/18299699619?text=${encodeURIComponent('Hola Jezleen Security. Me interesa el producto '+(p.name||'')+'. ¿Me pueden enviar precio y disponibilidad?')}">
+            Cotizar por WhatsApp
+          </a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  document.getElementById('catalogEmpty').style.display=list.length?'none':'block';
+
+  document.querySelectorAll('.galleryItem').forEach(item=>{
+    item.addEventListener('click',e=>{
+      if(e.target.closest('a')) return;
+      const img=item.dataset.img;
+      if(!img) return;
+      modalImg.src=img;
+      modal.classList.add('open');
+    });
+  });
+}
 tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');activeFilter=tab.dataset.filter;renderProducts()}));
 search.addEventListener('input',renderProducts);
 const modal=document.getElementById('modal'), modalImg=document.getElementById('modalImg');
@@ -199,7 +302,32 @@ document.getElementById('close').onclick=()=>modal.classList.remove('open');
 modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 
 renderProducts();
-(async()=>{try{const C=window.JEZLEEN_CONFIG||{};if(C.supabaseUrl&&C.supabaseAnonKey&&window.supabase){const client=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);const {data,error}=await client.from(C.supabaseTable||'products').select('*').eq('active',true).order('sort_order',{ascending:true});if(!error&&data&&data.length){products=data;localStorage.setItem('jezleen_products_v5',JSON.stringify(products));renderProducts()}}}catch(e){console.log('Catálogo local:',e)}})();
+(async()=>{
+  try{
+    const C=window.JEZLEEN_CONFIG||{};
+
+    if(C.supabaseUrl&&C.supabaseAnonKey&&window.supabase){
+      const client=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+
+      const {data,error}=await client
+        .from(C.supabaseTable||'products')
+        .select('*')
+        .eq('active',true)
+        .order('sort_order',{ascending:true});
+
+      if(!error){
+        // Supabase es la fuente principal, incluso cuando hay 0 productos activos.
+        products=Array.isArray(data)?data:[];
+        localStorage.setItem('jezleen_products_v5',JSON.stringify(products));
+        renderProducts();
+      }else{
+        console.warn('Supabase catálogo:',error);
+      }
+    }
+  }catch(e){
+    console.warn('Catálogo local:',e);
+  }
+})();
 
 document.getElementById('quoteForm').addEventListener('submit',e=>{
  e.preventDefault();
