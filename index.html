@@ -441,6 +441,95 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   flex-wrap:wrap !important;
 }
 
+
+/* =========================================================
+   SERVICIOS — TARJETAS VISUALES
+   ========================================================= */
+.serviceCards{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:16px !important;
+}
+.serviceCard{
+  position:relative !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  min-height:340px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-end !important;
+  border-radius:18px !important;
+  border:1px solid #1b3855 !important;
+  background:#071322 !important;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease !important;
+}
+.serviceCard:hover{
+  transform:translateY(-5px) !important;
+  border-color:#2d8fff !important;
+  box-shadow:0 18px 40px rgba(0,0,0,.34) !important;
+}
+.serviceImage{
+  position:absolute !important;
+  inset:0 !important;
+  background-image:url("assets/servicios-seguridad.png") !important;
+  background-repeat:no-repeat !important;
+  background-size:cover !important;
+  background-color:#071322 !important;
+  opacity:.92 !important;
+  transition:transform .35s ease, opacity .25s ease !important;
+}
+.serviceCard1 .serviceImage{background-image:url("assets/servicio-videovigilancia.png") !important;background-position:center !important}
+.serviceCard2 .serviceImage{background-image:url("assets/servicio-control-acceso.png") !important;background-position:center !important}
+.serviceCard3 .serviceImage{background-image:url("assets/servicio-alarmas.png") !important;background-position:center !important}
+.serviceCard4 .serviceImage{background-image:url("assets/servicio-dvr-nvr.png") !important;background-position:center !important}
+.serviceCard:hover .serviceImage{
+  transform:scale(1.04) !important;
+  opacity:1 !important;
+}
+.serviceImage::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:linear-gradient(180deg,rgba(4,14,26,.05) 15%,rgba(4,14,26,.30) 43%,rgba(4,14,26,.97) 100%) !important;
+}
+.serviceBody{
+  position:relative !important;
+  z-index:2 !important;
+  padding:22px 22px 20px !important;
+  background:linear-gradient(180deg,transparent,rgba(4,14,26,.70) 18%,rgba(4,14,26,.97) 52%) !important;
+}
+.serviceBody .icon{
+  width:38px !important;
+  height:38px !important;
+  border-radius:10px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin-bottom:14px !important;
+  background:rgba(7,31,54,.84) !important;
+  border:1px solid rgba(45,143,255,.45) !important;
+  color:#fff !important;
+  font-size:19px !important;
+}
+.serviceBody h3{
+  margin:0 0 9px !important;
+  font-size:18px !important;
+  color:#fff !important;
+}
+.serviceBody p{
+  margin:0 !important;
+  color:#b7c7d9 !important;
+  line-height:1.55 !important;
+  font-size:13px !important;
+}
+@media(max-width:1000px){
+  .serviceCards{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media(max-width:600px){
+  .serviceCards{grid-template-columns:1fr !important}
+  .serviceCard{min-height:310px !important}
+}
+
 </style>
 </head>
 <body>
@@ -474,11 +563,39 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
 
 <section id="servicios"><div class="container">
  <div class="sectionHead"><div><div class="eyebrow">Nuestros servicios</div><h2>Seguridad diseñada para tu espacio.</h2></div><p>Desde una cámara para tu hogar hasta sistemas completos para empresas: diseñamos la solución según el nivel de protección que necesitas.</p></div>
- <div class="cards">
-  <article class="card"><div class="icon">◉</div><h3>Videovigilancia</h3><p>Cámaras IP, CCTV, visión nocturna, grabación y acceso remoto desde teléfonos y computadoras.</p></article>
-  <article class="card"><div class="icon">⌁</div><h3>Control de acceso</h3><p>Soluciones para controlar y registrar quién puede entrar a áreas residenciales, comerciales o empresariales.</p></article>
-  <article class="card"><div class="icon">⚠</div><h3>Alarmas</h3><p>Detección de intrusión y sistemas de alerta para responder con mayor rapidez ante eventos.</p></article>
-  <article class="card"><div class="icon">▣</div><h3>DVR / NVR</h3><p>Grabadores y almacenamiento para administrar múltiples cámaras y conservar evidencia de forma organizada.</p></article>
+ <div class="cards serviceCards">
+  <article class="card serviceCard serviceCard1">
+    <div class="serviceImage" aria-hidden="true"></div>
+    <div class="serviceBody">
+      <div class="icon">◉</div>
+      <h3>Videovigilancia</h3>
+      <p>Cámaras IP, CCTV, visión nocturna, grabación y acceso remoto desde teléfonos y computadoras.</p>
+    </div>
+  </article>
+  <article class="card serviceCard serviceCard2">
+    <div class="serviceImage" aria-hidden="true"></div>
+    <div class="serviceBody">
+      <div class="icon">⌁</div>
+      <h3>Control de acceso</h3>
+      <p>Soluciones para controlar y registrar quién puede entrar a áreas residenciales, comerciales o empresariales.</p>
+    </div>
+  </article>
+  <article class="card serviceCard serviceCard3">
+    <div class="serviceImage" aria-hidden="true"></div>
+    <div class="serviceBody">
+      <div class="icon">⚠</div>
+      <h3>Alarmas</h3>
+      <p>Detección de intrusión y sistemas de alerta para responder con mayor rapidez ante eventos.</p>
+    </div>
+  </article>
+  <article class="card serviceCard serviceCard4">
+    <div class="serviceImage" aria-hidden="true"></div>
+    <div class="serviceBody">
+      <div class="icon">▣</div>
+      <h3>DVR / NVR</h3>
+      <p>Grabadores y almacenamiento para administrar múltiples cámaras y conservar evidencia de forma organizada.</p>
+    </div>
+  </article>
  </div>
 </div></section>
 
