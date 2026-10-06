@@ -236,6 +236,106 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   }
 }
 
+
+/* =========================================================
+   MARCAS / LOGOS
+   ========================================================= */
+.brandGrid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:12px;
+  margin-top:24px;
+}
+.brandCard{
+  min-width:0;
+  min-height:112px;
+  padding:14px 10px 12px;
+  border:1px solid #1b3551;
+  background:#081322;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  transition:.2s ease;
+}
+.brandCard:hover{
+  transform:translateY(-3px);
+  border-color:#2d6fa8;
+  box-shadow:0 10px 25px rgba(0,0,0,.22);
+}
+.brandLogo{
+  width:100%;
+  height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:8px;
+  overflow:hidden;
+}
+.brandLogo img{
+  display:block;
+  width:auto;
+  max-width:90%;
+  height:38px;
+  max-height:38px;
+  object-fit:contain;
+  background:transparent;
+}
+.logoUnv img{height:42px;max-height:42px}
+.logoHik img{height:30px;max-height:30px}
+.logoDahua img{height:34px;max-height:34px}
+.logoTvt span{
+  font-size:31px;
+  font-weight:900;
+  letter-spacing:-2px;
+  line-height:1;
+  color:#fff;
+}
+.logoImou span{
+  font-size:31px;
+  font-weight:800;
+  letter-spacing:-1.5px;
+  line-height:1;
+  color:#fff;
+}
+.logoUniarch span{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-1px;
+  line-height:1;
+  color:#fff;
+}
+.brandCard strong{
+  font-size:13px;
+  line-height:1.1;
+  color:#fff;
+  letter-spacing:.2px;
+}
+.brandCard > span{
+  margin-top:5px;
+  color:#2e9bff;
+  font-size:10px;
+  line-height:1;
+}
+.brandJezleen .brandLogo img{
+  max-width:92px;
+  height:40px;
+  border-radius:6px;
+  object-fit:contain;
+}
+@media(max-width:1050px){
+  .brandGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .brandGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){
+  .brandGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .brandCard{min-height:105px}
+}
+
 </style>
 </head>
 <body>
@@ -289,12 +389,60 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
  <p id="catalogEmpty" style="display:none;color:var(--muted);text-align:center;padding:35px">No hay productos en esta categoría.</p>
 </div></section>
 
-<section id="marcas"><div class="container">
- <div class="sectionHead"><div><div class="eyebrow">Tecnología</div><h2>Marcas que podemos integrar.</h2></div><p>Trabajamos con diferentes ecosistemas para seleccionar el equipo que mejor se adapte al presupuesto y requerimiento del proyecto.</p></div>
- <div class="brands">
-  <div class="brandCard">UNV<span>Uniview</span></div><div class="brandCard">TVT<span>Security</span></div><div class="brandCard">HIKVISION<span>Security</span></div><div class="brandCard">DAHUA<span>Technology</span></div><div class="brandCard">IMOU<span>Life</span></div><div class="brandCard">UNIARCH<span>Security</span></div><div class="brandCard">JEZLEEN<span>Security</span></div>
- </div>
-</div></section>
+<section id="marcas" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">TECNOLOGÍA</div>
+      <h2>Marcas que podemos integrar.</h2>
+    </div>
+    <p>Trabajamos con diferentes ecosistemas para seleccionar el equipo que mejor se adapte al presupuesto y requerimiento del proyecto.</p>
+  </div>
+
+  <div class="brandGrid">
+    <div class="brandCard">
+      <div class="brandLogo logoUnv">
+        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Uniview(logo).png" alt="UNV Uniview" loading="lazy">
+      </div>
+      <strong>UNV</strong><span>Uniview</span>
+    </div>
+
+    <div class="brandCard">
+      <div class="brandLogo logoTvt"><span>TVT</span></div>
+      <strong>TVT</strong><span>Security</span>
+    </div>
+
+    <div class="brandCard">
+      <div class="brandLogo logoHik">
+        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Hikvision_logo.svg" alt="Hikvision" loading="lazy">
+      </div>
+      <strong>HIKVISION</strong><span>Security</span>
+    </div>
+
+    <div class="brandCard">
+      <div class="brandLogo logoDahua">
+        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dahua_Technology_logo.svg" alt="Dahua Technology" loading="lazy">
+      </div>
+      <strong>DAHUA</strong><span>Technology</span>
+    </div>
+
+    <div class="brandCard">
+      <div class="brandLogo logoImou"><span>imou</span></div>
+      <strong>IMOU</strong><span>Life</span>
+    </div>
+
+    <div class="brandCard">
+      <div class="brandLogo logoUniarch"><span>uniarch</span></div>
+      <strong>UNIARCH</strong><span>Security</span>
+    </div>
+
+    <div class="brandCard brandJezleen">
+      <div class="brandLogo">
+        <img src="assets/LOGO%201.jpeg" alt="Jezleen Security" loading="lazy">
+      </div>
+      <strong>JEZLEEN</strong><span>Security</span>
+    </div>
+  </div>
+</section>
 
 <section id="proyectos" class="darkband"><div class="container">
  <div class="sectionHead"><div><div class="eyebrow">Proyectos</div><h2>De una cámara a una solución completa.</h2></div><p>Cuéntanos qué quieres proteger y te ayudamos a definir cobertura, equipos, almacenamiento y acceso remoto.</p></div>
