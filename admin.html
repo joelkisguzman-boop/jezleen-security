@@ -5,8 +5,11 @@
 <main class="wrap layout"><section class="panel"><h2 id="formTitle">Nuevo producto</h2><p class="hint">Agrega la información y la imagen. Puedes editarla después.</p><form id="form"><input id="id" type="hidden"><div class="field"><label>Modelo / nombre *</label><input id="name" required placeholder="UAC-B145-AF28(40)LM-DL"></div><div class="grid2"><div class="field"><label>Marca *</label><select id="brand"><option>UNV</option><option>TVT</option><option>Hikvision</option><option>Dahua</option><option>IMOU</option><option>Uniarch</option><option>Otra</option></select></div><div class="field"><label>Categoría *</label><select id="category"><option value="camaras">Cámaras</option><option value="dvr">DVR / NVR</option><option value="kits">Kits</option><option value="ptz">PTZ</option><option value="acceso">Control de acceso</option><option value="alarmas">Alarmas</option><option value="otros">Otros</option></select></div></div><div class="field"><label>Descripción *</label><textarea id="description" required placeholder="Descripción comercial del producto"></textarea></div><div class="grid2"><div class="field"><label>Precio</label><input id="price" placeholder="Consultar precio"></div><div class="field"><label>Ficha técnica / PDF</label><input id="pdf" type="url" placeholder="https://..."></div></div><div class="field"><label>Imagen</label><input id="image" type="file" accept="image/*"><img id="preview" class="preview hidden"></div><label class="check"><input id="featured" type="checkbox"> Producto destacado</label><label class="check" style="margin-top:10px"><input id="active" type="checkbox" checked> Visible en la web</label><div class="actions" style="margin-top:17px"><button class="btn primary" type="submit">Guardar</button><button class="btn hidden" type="button" id="cancel">Cancelar</button></div><div id="msg" class="status"></div></form><div class="cloud" id="cloudBox"><b>Nube:</b> comprobando configuración…</div></section>
 <section class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:end"><div><h2>Catálogo</h2><div class="hint" id="count"></div></div></div><div class="toolbar"><input id="search" placeholder="Buscar por modelo, marca o descripción"><select id="filter"><option value="all">Todas las categorías</option><option value="camaras">Cámaras</option><option value="dvr">DVR / NVR</option><option value="kits">Kits</option><option value="ptz">PTZ</option><option value="acceso">Acceso</option><option value="alarmas">Alarmas</option></select></div><div id="list" class="list"></div></section></main></div>
 <script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const C=window.JEZLEEN_CONFIG||{};const KEY='jezleen_products_v5';let products=[];let imageData='';let sb=null;
-const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const C=window.JEZLEEN_CONFIG||{};
+const KEY='jezleen_products_v5';
+let products=[]; let imageData=''; let sb=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
 const defaults=[
 {name:'UAC-B145-AF28(40)LM-DL',brand:'UNV',category:'camaras',description:'5MP ColorHunter Fixed Dual-light Bullet Analog Camera',price:'Consultar precio',image:'assets/image.png',featured:true,active:true},
 {name:'UAC-B142-AF28(40)LM-DL',brand:'UNV',category:'camaras',description:'2MP ColorHunter Fixed Dual-light Bullet Analog Camera',price:'Consultar precio',image:'assets/image(1).png',active:true},
@@ -16,138 +19,104 @@ const defaults=[
 {name:'IPC6315LFW-AX5C-VG1',brand:'UNV',category:'ptz',description:'5MP 5X ColorHunter Tri-Guard Dual-light Network PTZ Camera',price:'Consultar precio',image:'assets/image(7).png',active:true},
 {name:'IPC-B232-AF40-DL-ECO',brand:'Uniarch',category:'camaras',description:'2MP Double-Light Bullet Network Camera',price:'Consultar precio',image:'assets/image(9).png',active:true}
 ];
+function render(){
+ const q=$('search').value.toLowerCase(), f=$('filter').value;
+ const arr=products.map((p,i)=>({...p,_i:i})).filter(p=>(f==='all'||p.category===f)&&(p.name+' '+p.brand+' '+p.description).toLowerCase().includes(q));
+ $('count').textContent=products.length+' productos guardados';
+ $('list').innerHTML=arr.length?arr.map(p=>`<div class="item"><img class="thumb" src="${esc(p.image||'')}" alt=""><div class="meta"><b>${esc(p.name)} ${p.featured?'⭐':''}</b><span>${esc(p.brand)} · ${esc(p.category)} · ${esc(p.price||'Consultar precio')} · ${p.active!==false?'Visible':'Oculto'}</span><span>${esc(p.description)}</span></div><div class="mini"><button class="btn" onclick="editProduct(${p._i})">Editar</button><button class="btn" onclick="duplicateProduct(${p._i})">Duplicar</button><button class="btn danger" onclick="deleteProduct(${p._i})">Eliminar</button></div></div>`).join(''):'<div class="empty">No hay productos.</div>';
+}
 function localLoad(){try{products=JSON.parse(localStorage.getItem(KEY))||defaults}catch(e){products=defaults}localStorage.setItem(KEY,JSON.stringify(products));render()}
 async function cloudSetup(){
-  if(C.supabaseUrl&&C.supabaseAnonKey&&window.supabase){
-    sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
-    $('cloudBox').className='cloud ok';
-    $('cloudBox').innerHTML='<b>Nube configurada.</b> Los cambios pueden sincronizarse con Supabase.';
-    $('emailField').style.display='block';
-    try{const {data,error}=await sb.from(C.supabaseTable||'products').select('*').eq('active',true).order('sort_order',{ascending:true});if(!error&&data&&data.length){products=data;localStorage.setItem(KEY,JSON.stringify(products));render()}}catch(e){}
-  } else {
-    $('emailField').style.display='none';
-    $('cloudBox').innerHTML='<b>Modo local.</b> Para sincronizar entre dispositivos, completa Supabase en config.js.';
-  }
+ if(C.supabaseUrl&&C.supabaseAnonKey&&window.supabase){
+  sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+  $('cloudBox').className='cloud ok';
+  $('cloudBox').innerHTML='<b>Nube configurada.</b> Supabase será la fuente principal del catálogo.';
+  $('emailField').style.display='block';
+ }else{
+  $('emailField').style.display='none';
+  $('cloudBox').innerHTML='<b>Modo local.</b> Completa Supabase en config.js para sincronizar entre dispositivos.';
+ }
 }
-async function syncCloud(){
-  if(!sb)return false;
-  const {data:sessionData}=await sb.auth.getSession();
-  if(!sessionData.session)return false;
-  try{
-    for(let i=0;i<products.length;i++){
-      const p={...products[i]}; delete p._i;
-      if(!p.id) delete p.id;
-      const {error}=await sb.from(C.supabaseTable||'products').upsert(p);
-      if(error) throw error;
-    }
-    return true;
-  }catch(e){console.error(e);return false}
+async function loadCloudProducts(){
+ if(!sb) return false;
+ const {data:sessionData}=await sb.auth.getSession();
+ if(!sessionData.session) return false;
+ const {data,error}=await sb.from(C.supabaseTable||'products').select('*').order('sort_order',{ascending:true});
+ if(error) throw error;
+ products=data||[];
+ localStorage.setItem(KEY,JSON.stringify(products));
+ render();
+ return true;
 }
-function render(){const q=$('search').value.toLowerCase(),f=$('filter').value;const arr=products.map((p,i)=>({...p,_i:i})).filter(p=>(f==='all'||p.category===f)&&(p.name+' '+p.brand+' '+p.description).toLowerCase().includes(q));$('count').textContent=products.length+' productos guardados';$('list').innerHTML=arr.length?arr.map(p=>`<div class="item"><img class="thumb" src="${p.image||''}" alt=""><div class="meta"><b>${esc(p.name)} ${p.featured?'⭐':''}</b><span>${esc(p.brand)} · ${esc(p.category)} · ${esc(p.price||'Consultar precio')} · ${p.active!==false?'Visible':'Oculto'}</span><span>${esc(p.description)}</span></div><div class="mini"><button class="btn" onclick="editProduct(${p._i})">Editar</button><button class="btn" onclick="duplicateProduct(${p._i})">Duplicar</button><button class="btn danger" onclick="deleteProduct(${p._i})">Eliminar</button></div></div>`).join(''):'<div class="empty">No hay productos.</div>'}
-function reset(){ $('form').reset();$('id').value='';$('active').checked=true;$('formTitle').textContent='Nuevo producto';$('cancel').classList.add('hidden');imageData='';$('preview').classList.add('hidden') }
-function editProduct(i){const p=products[i];$('id').value=i;$('name').value=p.name;$('brand').value=p.brand;$('category').value=p.category;$('description').value=p.description;$('price').value=p.price||'';$('pdf').value=p.pdf||'';$('featured').checked=!!p.featured;$('active').checked=p.active!==false;imageData=p.image||'';if(imageData){$('preview').src=imageData;$('preview').classList.remove('hidden')}$('formTitle').textContent='Editar producto';$('cancel').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'})}
-window.editProduct=editProduct;window.deleteProduct=async i=>{if(confirm('¿Eliminar este producto?')){products.splice(i,1);localStorage.setItem(KEY,JSON.stringify(products));render();await syncCloud()}};window.duplicateProduct=i=>{products.splice(i,0,{...products[i],id:undefined,name:products[i].name+' - COPIA'});localStorage.setItem(KEY,JSON.stringify(products));render()};
-$('image').onchange=e=>{
-  const f=e.target.files[0];
-  if(!f)return;
-
-  if(!f.type.startsWith('image/')){
-    alert('Selecciona una imagen válida.');
-    return;
+async function saveCloudProduct(p){
+ if(!sb) return p;
+ const {data:sessionData}=await sb.auth.getSession();
+ if(!sessionData.session) throw new Error('Sesión no válida.');
+ const payload={...p}; delete payload._i;
+ const {data,error}=await sb.from(C.supabaseTable||'products').upsert(payload).select().single();
+ if(error) throw error;
+ return data;
+}
+function reset(){ $('form').reset();$('id').value='';$('active').checked=true;$('formTitle').textContent='Nuevo producto';$('cancel').classList.add('hidden');imageData='';$('preview').classList.add('hidden');$('msg').textContent=''; }
+function editProduct(i){
+ const p=products[i];$('id').value=i;$('name').value=p.name;$('brand').value=p.brand;$('category').value=p.category;$('description').value=p.description;$('price').value=p.price||'';$('pdf').value=p.pdf||'';$('featured').checked=!!p.featured;$('active').checked=p.active!==false;imageData=p.image||'';
+ if(imageData){$('preview').src=imageData;$('preview').classList.remove('hidden')}
+ $('formTitle').textContent='Editar producto';$('cancel').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'});
+}
+window.editProduct=editProduct;
+window.deleteProduct=async i=>{
+ const p=products[i];
+ if(!confirm('¿Eliminar este producto definitivamente?')) return;
+ try{
+  if(sb&&p.id){
+   const {error}=await sb.from(C.supabaseTable||'products').delete().eq('id',p.id);
+   if(error) throw error;
   }
-
-  imageData=f;
-
-  const r=new FileReader();
-  r.onload=()=>{
-    $('preview').src=r.result;
-    $('preview').classList.remove('hidden');
-  };
-  r.readAsDataURL(f);
+  products.splice(i,1);localStorage.setItem(KEY,JSON.stringify(products));render();
+  $('msg').textContent='Producto eliminado correctamente.';
+ }catch(e){console.error(e);alert('No se pudo eliminar de Supabase: '+e.message)}
 };
+window.duplicateProduct=async i=>{
+ try{
+  const copy={...products[i]}; delete copy.id; delete copy.created_at; delete copy.updated_at; delete copy._i;
+  copy.name=copy.name+' - COPIA'; copy.sort_order=products.length;
+  const saved=await saveCloudProduct(copy);
+  products.push(saved);localStorage.setItem(KEY,JSON.stringify(products));render();
+  $('msg').textContent='Producto duplicado y sincronizado.';
+ }catch(e){console.error(e);alert('No se pudo duplicar: '+e.message)}
+};
+$('image').onchange=e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Selecciona una imagen válida.');return}imageData=f;const r=new FileReader();r.onload=()=>{$('preview').src=r.result;$('preview').classList.remove('hidden')};r.readAsDataURL(f)};
 $('form').onsubmit=async e=>{
-  e.preventDefault();
-
-  const idx=$('id').value;
-  const old=idx!==''?products[Number(idx)]:{};
-  let imageUrl=old.image||'';
-
-  // Subir imagen nueva a Supabase Storage
+ e.preventDefault();
+ const idx=$('id').value; const old=idx!==''?products[Number(idx)]:{}; let imageUrl=old.image||'';
+ try{
   if(imageData instanceof File){
-    if(!sb){
-      $('msg').textContent='No hay conexión con Supabase.';
-      return;
-    }
-
-    const ext=imageData.name.split('.').pop().toLowerCase();
-    const fileName=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
-
-    $('msg').textContent='Subiendo imagen...';
-
-    const {error:uploadError}=await sb
-      .storage
-      .from('product-images')
-      .upload(fileName,imageData,{
-        cacheControl:'3600',
-        upsert:false,
-        contentType:imageData.type
-      });
-
-    if(uploadError){
-      console.error(uploadError);
-      $('msg').textContent='No se pudo subir la imagen: '+uploadError.message;
-      return;
-    }
-
-    const {data:urlData}=sb
-      .storage
-      .from('product-images')
-      .getPublicUrl(fileName);
-
-    imageUrl=urlData.publicUrl;
+   if(!sb) throw new Error('No hay conexión con Supabase.');
+   const ext=imageData.name.split('.').pop().toLowerCase(); const fileName=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
+   $('msg').textContent='Subiendo imagen...';
+   const {error:uploadError}=await sb.storage.from('product-images').upload(fileName,imageData,{cacheControl:'3600',upsert:false,contentType:imageData.type});
+   if(uploadError) throw uploadError;
+   const {data:urlData}=sb.storage.from('product-images').getPublicUrl(fileName); imageUrl=urlData.publicUrl;
   }
-
-  const p={
-    ...old,
-    name:$('name').value.trim(),
-    brand:$('brand').value,
-    category:$('category').value,
-    description:$('description').value.trim(),
-    price:$('price').value.trim()||'Consultar precio',
-    pdf:$('pdf').value.trim(),
-    image:imageUrl,
-    featured:$('featured').checked,
-    active:$('active').checked,
-    sort_order:old.sort_order??products.length
-  };
-
-  if(idx==='') products.unshift(p);
-  else products[Number(idx)]=p;
-
-  localStorage.setItem(KEY,JSON.stringify(products));
-  render();
-
-  const ok=await syncCloud();
-
-  $('msg').textContent=ok
-    ?'Producto guardado y sincronizado.'
-    :'Guardado localmente; revisa la configuración de nube.';
-
-  reset();
+  const p={...old,name:$('name').value.trim(),brand:$('brand').value,category:$('category').value,description:$('description').value.trim(),price:$('price').value.trim()||'Consultar precio',pdf:$('pdf').value.trim(),image:imageUrl,featured:$('featured').checked,active:$('active').checked,sort_order:old.sort_order??products.length};
+  const saved=await saveCloudProduct(p);
+  if(idx==='') products.unshift(saved); else products[Number(idx)]=saved;
+  localStorage.setItem(KEY,JSON.stringify(products));render();$('msg').textContent='Producto guardado y sincronizado con Supabase.';reset();
+ }catch(err){console.error(err);$('msg').textContent='Error: '+err.message;alert('No se pudo guardar: '+err.message)}
 };
-
-$('cancel').onclick=reset;
-$('search').oninput=render;
-$('filter').onchange=render;
-$('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{products=JSON.parse(r.result);localStorage.setItem(KEY,JSON.stringify(products));render();alert('Catálogo importado.')}catch(x){alert('Archivo no válido.')}};r.readAsText(f)};
+$('cancel').onclick=reset;$('search').oninput=render;$('filter').onchange=render;
+$('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const imported=JSON.parse(r.result);if(!Array.isArray(imported))throw new Error('El archivo no contiene una lista de productos.');for(const p of imported){const copy={...p};delete copy._i;delete copy.id;delete copy.created_at;delete copy.updated_at;await saveCloudProduct(copy)}await loadCloudProducts();alert('Catálogo importado y sincronizado con Supabase.')}catch(x){alert('No se pudo importar: '+x.message)}};r.readAsText(f)};
+$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jezleen-products.json';a.click();URL.revokeObjectURL(a.href)};
 cloudSetup();
-  $('loginBtn').onclick=async()=>{
-  const pass=$('pass').value;
-  if(C.supabaseUrl&&C.supabaseAnonKey&&sb){
-    const email=$('email').value.trim();
-    const {error}=await sb.auth.signInWithPassword({email,password:pass});
-    if(error){$('loginMsg').textContent='No se pudo iniciar sesión: '+error.message;return}
-  } else if(pass!==C.adminPassword){$('loginMsg').textContent='Contraseña incorrecta.';return}
-  $('login').classList.add('hidden');$('app').classList.remove('hidden');localLoad();cloudSetup();
-};$('pass').onkeydown=e=>{if(e.key==='Enter')$('loginBtn').click()};$('email').onkeydown=e=>{if(e.key==='Enter')$('loginBtn').click()};$('logoutBtn').onclick=()=>location.reload();
+$('loginBtn').onclick=async()=>{
+ const pass=$('pass').value;
+ if(C.supabaseUrl&&C.supabaseAnonKey&&sb){
+  const email=$('email').value.trim();
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){$('loginMsg').textContent='No se pudo iniciar sesión: '+error.message;return}
+  $('login').classList.add('hidden');$('app').classList.remove('hidden');
+  try{await loadCloudProducts();$('loginMsg').textContent=''}catch(e){$('loginMsg').textContent='Error cargando catálogo: '+e.message}
+ }else if(pass!==C.adminPassword){$('loginMsg').textContent='Contraseña incorrecta.';return}else{$('login').classList.add('hidden');$('app').classList.remove('hidden');localLoad()}
+};
+$('pass').onkeydown=e=>{if(e.key==='Enter')$('loginBtn').click()};$('email').onkeydown=e=>{if(e.key==='Enter')$('loginBtn').click()};$('logoutBtn').onclick=async()=>{if(sb)await sb.auth.signOut();location.reload()};
 </script></body></html>
