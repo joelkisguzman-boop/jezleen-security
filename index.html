@@ -147,6 +147,95 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   .gallery{grid-template-columns:1fr}
   .galleryItem img{height:250px}
 }
+
+/* =========================================================
+   FIX DEFINITIVO — TARJETAS DEL CATÁLOGO
+   Evita que CSS Grid estire una tarjeta y deje espacio blanco
+   debajo del botón cuando las tarjetas tienen alturas distintas.
+   ========================================================= */
+.gallery{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:18px !important;
+  align-items:start !important;
+  grid-auto-rows:max-content !important;
+}
+
+.galleryItem{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  align-self:start !important;
+  padding:0 !important;
+  background:#081322 !important;
+  border:1px solid var(--line) !important;
+  border-radius:16px !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+.galleryItem img{
+  display:block !important;
+  width:100% !important;
+  height:330px !important;
+  min-height:330px !important;
+  max-height:330px !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:#fff !important;
+}
+
+.galleryItem .cap{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  box-sizing:border-box !important;
+  padding:14px 16px 16px !important;
+  margin:0 !important;
+  background:#081322 !important;
+  color:#fff !important;
+}
+
+.galleryItem .cap b{
+  display:block !important;
+  margin-bottom:5px !important;
+}
+
+.galleryItem .productPrice{
+  display:block !important;
+  margin-top:5px !important;
+  color:#9cacbf !important;
+}
+
+.galleryItem .productQuote{
+  display:block !important;
+  margin-top:12px !important;
+  padding-top:0 !important;
+}
+
+.galleryItem .productQuote .btn{
+  display:inline-block !important;
+}
+
+/* Móvil */
+@media(max-width:900px){
+  .gallery{
+    grid-template-columns:1fr !important;
+    align-items:start !important;
+  }
+}
+
+@media(max-width:560px){
+  .galleryItem img{
+    height:250px !important;
+    min-height:250px !important;
+    max-height:250px !important;
+  }
+}
+
 </style>
 </head>
 <body>
