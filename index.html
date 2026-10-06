@@ -338,36 +338,68 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
 
 
 /* =========================================================
-   HERO — SEGURIDAD A LA MEDIDA
-   Imagen generada para Jezleen Security
+   PROYECTOS — IMAGEN SOLO DENTRO DEL CUADRO
    ========================================================= */
 .securityMeasureHero{
   position:relative !important;
   overflow:hidden !important;
-  min-height:330px !important;
-  background:
-    linear-gradient(90deg,rgba(4,14,27,.97) 0%,rgba(4,14,27,.90) 34%,rgba(4,14,27,.42) 63%,rgba(4,14,27,.18) 100%),
-    url("assets/hero-seguridad-medida.png") center center / cover no-repeat !important;
+  background:none !important;
 }
 
-.securityMeasureHero > *{
-  position:relative;
-  z-index:2;
-}
-
+.securityMeasureHero::before,
 .securityMeasureHero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(90deg,rgba(2,10,20,.25),transparent 60%);
-  pointer-events:none;
-  z-index:1;
+  display:none !important;
 }
 
-@media(max-width:700px){
-  .securityMeasureHero{
-    min-height:420px !important;
-    background-position:center right !important;
+/* El cuadro "Diseñamos seguridad a la medida" lleva la imagen */
+.securityMeasureHero .projectGrid > .project:first-child{
+  position:relative !important;
+  overflow:hidden !important;
+  min-height:325px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-end !important;
+  background:
+    linear-gradient(90deg,
+      rgba(5,18,32,.98) 0%,
+      rgba(5,18,32,.94) 28%,
+      rgba(5,18,32,.72) 52%,
+      rgba(5,18,32,.20) 82%,
+      rgba(5,18,32,.08) 100%
+    ),
+    url("assets/hero-seguridad-medida.png") right center / cover no-repeat !important;
+}
+
+/* Mantiene el contenido por encima de la fotografía */
+.securityMeasureHero .projectGrid > .project:first-child > *{
+  position:relative !important;
+  z-index:2 !important;
+  max-width:58% !important;
+}
+
+/* Evita que el fondo original se vea fuera de la tarjeta */
+.securityMeasureHero .projectGrid{
+  position:relative !important;
+  z-index:2 !important;
+}
+
+@media(max-width:900px){
+  .securityMeasureHero .projectGrid > .project:first-child{
+    min-height:300px !important;
+    background-position:right center !important;
+  }
+  .securityMeasureHero .projectGrid > .project:first-child > *{
+    max-width:72% !important;
+  }
+}
+
+@media(max-width:600px){
+  .securityMeasureHero .projectGrid > .project:first-child{
+    min-height:330px !important;
+    background-position:70% center !important;
+  }
+  .securityMeasureHero .projectGrid > .project:first-child > *{
+    max-width:100% !important;
   }
 }
 
