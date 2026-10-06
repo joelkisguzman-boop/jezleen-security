@@ -435,6 +435,12 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
   }
 }
 
+
+/* Nueva categoría: Cámaras Interiores */
+.catalogTabs{
+  flex-wrap:wrap !important;
+}
+
 </style>
 </head>
 <body>
@@ -480,7 +486,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
  <div class="sectionHead"><div><div class="eyebrow">Catálogo visual</div><h2>Equipos para construir tu sistema.</h2></div><p>Una selección visual de las líneas de productos que podemos integrar en tu proyecto. Solicita disponibilidad y precio.</p></div>
  <div class="catalogTools" style="display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:22px">
   <div class="catalogTabs">
-   <button class="tab active" data-filter="all">Todo</button><button class="tab" data-filter="camaras">Cámaras</button><button class="tab" data-filter="dvr">DVR / NVR</button><button class="tab" data-filter="kits">Kits</button><button class="tab" data-filter="ptz">PTZ</button><button class="tab" data-filter="acceso">Acceso</button><button class="tab" data-filter="alarmas">Alarmas</button>
+   <button class="tab active" data-filter="all">Todo</button><button class="tab" data-filter="camaras">Cámaras</button><button class="tab" data-filter="camaras-interiores">Interiores</button><button class="tab" data-filter="dvr">DVR / NVR</button><button class="tab" data-filter="kits">Kits</button><button class="tab" data-filter="ptz">PTZ</button><button class="tab" data-filter="acceso">Acceso</button><button class="tab" data-filter="alarmas">Alarmas</button>
   </div>
   <input id="productSearch" placeholder="Buscar modelo o producto..." style="background:#050c17;color:white;border:1px solid var(--line);border-radius:999px;padding:10px 15px;min-width:240px;outline:none">
  </div>
@@ -596,7 +602,10 @@ const search=document.getElementById('productSearch');
 function renderProducts(){
   const q=(search.value||'').toLowerCase().trim();
   const list=products.filter(p=>
-    (activeFilter==='all'||p.category===activeFilter) &&
+    (activeFilter==='all' ||
+     p.category===activeFilter ||
+     (activeFilter==='camaras-interiores' &&
+      (p.category==='camaras-interiores' || p.category==='Cámaras Interiores'))) &&
     ((p.name||'')+' '+(p.brand||'')+' '+(p.description||'')).toLowerCase().includes(q)
   );
 
