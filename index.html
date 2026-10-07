@@ -531,10 +531,9 @@ footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-s
 }
 
 
-/* Ficha técnica en tarjetas de producto */
-.productQuote{display:flex !important;flex-wrap:wrap !important;align-items:center !important;gap:8px !important;}
-.productQuote .productPdf{display:inline-flex !important;align-items:center !important;justify-content:center !important;text-decoration:none !important;padding:8px 12px !important;font-size:12px !important;border-radius:9px !important;border:1px solid #2b78b8 !important;background:#0b1d30 !important;color:#d9ecff !important;}
-.productQuote .productPdf:hover{background:#123452 !important;border-color:#2d9cff !important;}
+.productMeta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.productMeta span{display:inline-flex;align-items:center;padding:4px 9px;border:1px solid rgba(57,167,255,.35);border-radius:999px;background:rgba(8,125,255,.10);color:#bfe3ff;font-size:10px;font-weight:800;line-height:1}
+
 </style>
 </head>
 <body>
@@ -737,6 +736,10 @@ function renderProducts(){
       <div class="cap">
         <b>${p.brand||''} · ${p.name||''}</b>
         <div>${p.description||''}</div>
+        ${((p.camera_type||p.technology) ? `<div class="productMeta">
+          ${p.camera_type ? `<span>${p.camera_type}</span>` : ''}
+          ${p.technology ? `<span>${p.technology}</span>` : ''}
+        </div>` : '')}
         <span class="productPrice">${p.price||'Consultar precio'}</span>
         <div class="productQuote">
           <a class="btn primary"
@@ -745,14 +748,6 @@ function renderProducts(){
              href="https://wa.me/18299699619?text=${encodeURIComponent('Hola Jezleen Security. Me interesa el producto '+(p.name||'')+'. ¿Me pueden enviar precio y disponibilidad?')}">
             Cotizar por WhatsApp
           </a>
-          ${p.pdf ? `
-            <a class="btn secondary productPdf"
-               href="${p.pdf}"
-               target="_blank"
-               rel="noopener noreferrer">
-              📄 Ficha técnica
-            </a>
-          ` : ''}
         </div>
       </div>
     </article>
